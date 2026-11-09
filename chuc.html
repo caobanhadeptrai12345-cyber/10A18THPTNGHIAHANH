@@ -7,17 +7,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; overflow: hidden; }
+    html, body { width: 100%; height: 100%; }
     body {
       background: #000;
       font-family: "Noto Sans", Arial, sans-serif;
+      overflow-x: hidden;
     }
 
+    /* Sân khấu trái tim */
     #stage {
       position: fixed; inset: 0;
       transition: opacity 1.5s ease;
     }
-    #stage.fade { opacity: 0; }
+    #stage.fade { opacity: 0; pointer-events: none; }
 
     .word {
       position: absolute;
@@ -30,43 +32,39 @@
       animation: pop 0.5s ease forwards;
     }
     @keyframes pop {
-      to {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-      }
+      to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
     }
 
+    /* Lời chúc sau khi trái tim tan */
     #final {
-      position: fixed; inset: 0;
+      position: relative; min-height: 100vh;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      text-align: center; padding: 20px;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.8s ease;
+      text-align: center; padding: 60px 20px;
+      opacity: 0; transition: opacity 1.2s ease;
+      background: radial-gradient(circle at 50% 30%, #1d1d40, #05050f 75%);
+      color: #fff;
     }
     #final.show { opacity: 1; }
 
-    #final .f1 {
-      font-size: clamp(1.8rem, 6vw, 3.6rem);
-      font-weight: 900; color: #fff;
-      letter-spacing: 2px;
-    }
-    #final .f2 {
-      margin-top: 10px;
-      font-size: clamp(2.6rem, 11vw, 7rem);
-      font-weight: 900; color: #ff2d3d;
+    #final .title {
+      font-size: clamp(1.8rem, 6vw, 3.2rem);
+      font-weight: 900; color: #ff2d3d; line-height: 1.2;
       text-shadow: 0 0 12px #ff2d3d, 0 0 30px #ff2d3d;
-      animation: zoom 0.9s cubic-bezier(.2,.8,.2,1) both,
-                 glow 1.6s ease-in-out 0.9s infinite;
-    }
-    @keyframes zoom {
-      from { transform: scale(0.3); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+      animation: glow 1.6s ease-in-out infinite;
     }
     @keyframes glow {
       0%, 100% { text-shadow: 0 0 12px #ff2d3d, 0 0 30px #ff2d3d; }
-      50% { text-shadow: 0 0 24px #ff2d3d, 0 0 60px #ff2d3d, 0 0 90px #ff2d3d; }
+      50% { text-shadow: 0 0 24px #ff2d3d, 0 0 60px #ff2d3d; }
     }
+
+    #final .letter {
+      margin-top: 30px; max-width: 760px;
+      font-size: clamp(1rem, 2.2vw, 1.15rem);
+      line-height: 1.85; text-align: left;
+    }
+    #final .letter p { margin-bottom: 16px; }
+    #final .letter .sign { text-align: center; font-weight: 700; color: #ffd166; margin-top: 20px; }
   </style>
 </head>
 <body>
@@ -74,53 +72,58 @@
 <div id="stage"></div>
 
 <div id="final">
-  <div class="f1">CHÚC THẦY CÔ</div>
-  <div class="f2">20/11 VUI VẺ</div>
+  <div class="title">💙 LỜI CHÚC MỪNG NGÀY NHÀ GIÁO VIỆT NAM 20/11</div>
+  <div class="letter">
+    <p>Kính gửi quý thầy cô kính yêu!</p>
+    <p>Nhân ngày Nhà giáo Việt Nam 20/11, chúng em xin gửi đến thầy cô những lời chúc tốt đẹp và chân thành nhất.</p>
+    <p>Cảm ơn thầy cô đã luôn tận tâm dạy dỗ, dìu dắt và truyền đạt cho chúng em những kiến thức quý báu. Cảm ơn thầy cô vì những bài học hay, những lời động viên và cả những lần nghiêm khắc nhắc nhở để chúng em ngày càng trưởng thành hơn.</p>
+    <p>Chúng em hiểu rằng, phía sau mỗi tiết học là biết bao công sức, sự kiên nhẫn và tình yêu nghề của thầy cô. Dù đôi khi chúng em còn mắc lỗi, chưa ngoan hay chưa đạt được kết quả như mong đợi, thầy cô vẫn luôn bao dung, quan tâm và dành cho chúng em những điều tốt đẹp nhất.</p>
+    <p>Nhân dịp đặc biệt này, chúng em kính chúc thầy cô luôn mạnh khỏe, vui vẻ, hạnh phúc và thành công trong sự nghiệp trồng người. Mong rằng thầy cô sẽ luôn giữ mãi ngọn lửa nhiệt huyết, tiếp tục chắp cánh cho những ước mơ và đưa nhiều thế hệ học trò đến bến bờ tri thức.</p>
+    <p>Chúng em sẽ luôn ghi nhớ công ơn dạy dỗ của thầy cô.</p>
+    <p class="sign">Mãi mãi biết ơn thầy cô! ❤️<br>Tập thể lớp 10A18 kính tặng!</p>
+  </div>
 </div>
 
 <script>
   const stage = document.getElementById('stage');
   const finalBox = document.getElementById('final');
 
+  // Dòng chữ hiện theo hình trái tim
+  const TEXT = 'chúc thầy cô giáo 20/11 vui vẻ';
   const W = window.innerWidth;
   const H = window.innerHeight;
   const m = Math.min(W, H);
-  const s = m * 0.022;          // độ lớn trái tim
+  const s = m * 0.022;
   const cx = W / 2;
   const cy = H * 0.48;
   const fontSize = Math.max(8, m * 0.018);
 
-  const layers = [1, 0.8, 0.6]; // 3 lớp chữ tạo thành trái tim dày
+  const layers = [1, 0.8, 0.6];
   const perLayer = 55;
-  const delay = 45;             // mili giây giữa mỗi cụm chữ
+  const delay = 45;
   let idx = 0;
 
   layers.forEach(k => {
     for (let i = 0; i < perLayer; i++) {
       const t = (i / perLayer) * 2 * Math.PI;
-      // Phương trình trái tim
       const x = 16 * Math.pow(Math.sin(t), 3);
       const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
 
       const span = document.createElement('span');
       span.className = 'word';
-      span.textContent = 'I Love You';
+      span.textContent = TEXT;
       span.style.left = (cx + x * s * k) + 'px';
       span.style.top = (cy - y * s * k) + 'px';
       span.style.fontSize = fontSize + 'px';
+      span.style.color = k === 1 ? '#ff4d8d' : (k === 0.8 ? '#ff7aa8' : '#ffb3cc');
       span.style.animationDelay = (idx * delay / 1000) + 's';
       stage.appendChild(span);
       idx++;
     }
   });
 
-  // Thời gian chữ cuối cùng hiện xong
   const totalTime = idx * delay + 500;
-
-  // Trái tim mờ dần
   setTimeout(() => stage.classList.add('fade'), totalTime);
-
-  // Hiện dòng chữ lớn
   setTimeout(() => finalBox.classList.add('show'), totalTime + 1200);
 </script>
 
