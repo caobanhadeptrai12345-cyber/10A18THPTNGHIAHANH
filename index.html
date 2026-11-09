@@ -3,12 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Người lái đò thầm lặng - Tri ân thầy cô 20/11</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Noto+Sans:wght@400;600&display=swap&subset=vietnamese" rel="stylesheet">
+  <title>Người lái đò thầm lặng - Lớp 10A18 - THPT Nghĩa Hành</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Noto+Sans:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --blue: #1f4e79;
       --blue-light: #3f7cac;
+      --sky: #9cc3e0;
       --gold: #e8c46a;
       --cream: #fffaf0;
       --white: #ffffff;
@@ -25,31 +26,42 @@
     }
     .sans { font-family: "Noto Sans", Arial, sans-serif; }
 
-    /* Cánh hoa rơi */
+    /* ===== Cánh hoa rơi ===== */
     #petals { position: fixed; inset: 0; pointer-events: none; z-index: 5; overflow: hidden; }
     .petal {
       position: absolute; top: -30px; width: 14px; height: 14px;
       background: radial-gradient(circle at 30% 30%, #fff, var(--gold));
       border-radius: 0 80% 0 80%;
-      opacity: 0.7;
-      animation: fall linear infinite;
+      opacity: 0.75;
+      animation: fall linear infinite, sway 3s ease-in-out infinite alternate;
     }
     @keyframes fall {
       0% { transform: translateY(0) rotate(0deg); }
       100% { transform: translateY(110vh) rotate(360deg); }
     }
+    @keyframes sway {
+      from { margin-left: -20px; }
+      to { margin-left: 20px; }
+    }
 
-    /* Trang 1: Bìa */
+    /* ===== Trang 1: Bìa ===== */
     .cover {
-      min-height: 100vh;
+      position: relative; min-height: 100vh; overflow: hidden;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       text-align: center; padding: 50px 20px;
-      background: linear-gradient(160deg, var(--blue) 0%, var(--blue-light) 60%, #9cc3e0 100%);
+      background: linear-gradient(-45deg, var(--blue), var(--blue-light), var(--sky), var(--blue));
+      background-size: 300% 300%;
+      animation: gradientShift 14s ease infinite;
       color: var(--white);
     }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
     .cover .tag {
-      letter-spacing: 4px; text-transform: uppercase;
+      letter-spacing: 5px; text-transform: uppercase;
       font-size: 0.85rem; color: var(--gold);
       animation: fadeDown 1s ease both;
     }
@@ -58,6 +70,17 @@
       margin: 16px 0 12px; line-height: 1.25;
       text-shadow: 0 4px 20px rgba(0,0,0,0.25);
       animation: fadeDown 1.2s 0.2s ease both;
+    }
+    .cover h1 span {
+      display: inline-block;
+      background: linear-gradient(90deg, #fff, var(--gold), #fff);
+      background-size: 200% auto;
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shine 3s linear infinite;
+    }
+    @keyframes shine {
+      to { background-position: 200% center; }
     }
     .cover h2 {
       font-weight: normal; font-style: italic;
@@ -70,46 +93,64 @@
       border-radius: 16px; overflow: hidden;
       border: 6px solid var(--white);
       box-shadow: 0 18px 40px rgba(0,0,0,0.3);
-      animation: fadeDown 1.2s 0.6s ease both;
+      animation: fadeUp 1.2s 0.6s ease both, float 5s 1.8s ease-in-out infinite;
     }
-    .cover .cover-img img { width: 100%; display: block; }
-    .cover .dedicate { margin-top: 26px; font-size: 1.05rem; }
-    .cover .class-info { margin-top: 8px; font-size: 0.98rem; opacity: 0.85; }
+    .cover .cover-img img { width: 100%; display: block; transition: transform 0.6s ease; }
+    .cover .cover-img:hover img { transform: scale(1.05); }
+    .cover .dedicate { margin-top: 26px; font-size: 1.05rem; animation: fadeUp 1s 0.9s ease both; }
+    .cover .class-info {
+      margin-top: 10px; font-size: 1.05rem; font-weight: 700;
+      letter-spacing: 1px; color: var(--gold);
+      animation: fadeUp 1s 1.05s ease both;
+    }
+    .cover .school { margin-top: 4px; font-size: 0.98rem; opacity: 0.9; animation: fadeUp 1s 1.15s ease both; }
     .cover .scroll-hint {
       margin-top: 30px; font-family: "Noto Sans", Arial, sans-serif;
-      font-size: 0.85rem; opacity: 0.7;
+      font-size: 0.85rem; opacity: 0.75;
       animation: bounce 2s infinite;
     }
     @keyframes fadeDown {
       from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
     @keyframes bounce {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(8px); }
     }
 
-    /* Khung ảnh */
+    /* ===== Khung ảnh ===== */
     .photo {
       border-radius: 14px; overflow: hidden;
       border: 6px solid var(--white);
       box-shadow: 0 12px 30px rgba(31,78,121,0.18);
       background: #eaf2fa;
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
     }
+    .photo:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(31,78,121,0.25); }
     .photo img { width: 100%; display: block; transition: transform 0.9s ease; }
     .photo:hover img { transform: scale(1.04); }
 
-    /* Hiện dần khi cuộn */
+    /* ===== Hiện dần khi cuộn ===== */
     .reveal {
       opacity: 0; transform: translateY(50px);
       transition: opacity 1s ease, transform 1s cubic-bezier(.2,.8,.2,1);
     }
     .reveal.show { opacity: 1; transform: translateY(0); }
+    .reveal.left { transform: translateX(-60px); }
+    .reveal.right { transform: translateX(60px); }
+    .reveal.left.show, .reveal.right.show { transform: translateX(0); }
 
     section.page {
       position: relative; z-index: 1;
-      padding: 80px 20px;
-      max-width: 960px; margin: 0 auto;
+      padding: 80px 20px; max-width: 960px; margin: 0 auto;
     }
     .page-title {
       text-align: center; color: var(--blue);
@@ -118,9 +159,14 @@
     .divider {
       width: 90px; height: 3px; margin: 0 auto 36px;
       background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      background-size: 200% 100%;
+      animation: dividerMove 3s linear infinite;
+    }
+    @keyframes dividerMove {
+      to { background-position: 200% 0; }
     }
 
-    /* Trang 2 */
+    /* ===== Trang 2 ===== */
     .page2-img { max-width: 720px; margin: 0 auto 50px; }
     .page2-img img { width: 100%; display: block; border-radius: 14px; }
     .letter {
@@ -143,7 +189,7 @@
     .memory-text p { margin-bottom: 14px; }
     .memory-text .closing-quote { color: var(--blue-light); font-style: italic; font-size: 1.08rem; }
 
-    /* Trang 3 */
+    /* ===== Trang 3 ===== */
     .promise {
       background: linear-gradient(160deg, #eef5fb, #fffdf5);
       border-radius: 18px; padding: 40px;
@@ -155,6 +201,7 @@
     }
     .promise p { margin-bottom: 14px; text-align: justify; }
     .finale {
+      position: relative; overflow: hidden;
       text-align: center; padding: 50px 24px;
       background: linear-gradient(135deg, var(--blue), var(--blue-light));
       color: var(--white); border-radius: 20px;
@@ -179,6 +226,7 @@
       text-align: center; padding: 30px; color: #7a8ea3;
       font-family: "Noto Sans", Arial, sans-serif; font-size: 0.9rem;
     }
+    footer strong { color: var(--blue); }
 
     @media (max-width: 720px) {
       .letter { padding: 28px 22px; }
@@ -198,7 +246,7 @@
 <!-- TRANG 1: BÌA -->
 <header class="cover">
   <div class="tag sans">Tri ân thầy cô</div>
-  <h1>NGƯỜI LÁI ĐÒ<br>THẦM LẶNG</h1>
+  <h1><span>NGƯỜI LÁI ĐÒ</span><br><span>THẦM LẶNG</span></h1>
   <h2>Chào mừng ngày Nhà giáo Việt Nam 20/11</h2>
 
   <div class="cover-img">
@@ -206,7 +254,8 @@
   </div>
 
   <div class="dedicate">Kính tặng: Quý thầy cô giáo kính yêu!</div>
-  <div class="class-info">Tập thể lớp: …… &nbsp;|&nbsp; Trường: ……</div>
+  <div class="class-info">LỚP 10A18</div>
+  <div class="school">Trường THPT Nghĩa Hành</div>
   <div class="scroll-hint">↓ Cuộn xuống để đọc thiệp</div>
 </header>
 
@@ -221,7 +270,7 @@
     </div>
   </div>
 
-  <div class="letter reveal">
+  <div class="letter reveal left">
     <p class="greet">Kính thưa quý thầy cô!</p>
     <p>
       Có những nghề nghiệp không tạo nên những điều lớn lao ngay trước mắt,
@@ -240,14 +289,14 @@
       và dành cho chúng em sự quan tâm chân thành.
     </p>
     <p>
-      Nhân ngày Nhà giáo Việt Nam 20/11, tập thể lớp chúng em xin gửi đến quý thầy cô
+      Nhân ngày Nhà giáo Việt Nam 20/11, lớp 10A18 chúng em xin gửi đến quý thầy cô
       lòng biết ơn sâu sắc nhất. Cảm ơn thầy cô vì đã luôn đồng hành, động viên và tiếp
       thêm động lực để chúng em tự tin bước tiếp trên con đường học tập.
     </p>
   </div>
 
   <h3 class="memory-title reveal">Góc kỷ niệm – Những điều không thể quên</h3>
-  <div class="memory-text reveal">
+  <div class="memory-text reveal right">
     <p>
       Mỗi giờ học, mỗi lời giảng, mỗi nụ cười và cả những lời nhắc nhở của thầy cô
       đều trở thành những kỷ niệm đẹp trong quãng đời học sinh.
@@ -267,8 +316,8 @@
   <h2 class="page-title reveal">Lời hứa và thông điệp gửi thầy cô</h2>
   <div class="divider reveal"></div>
 
-  <div class="promise reveal">
-    <h3>Lời hứa từ tập thể lớp</h3>
+  <div class="promise reveal left">
+    <h3>Lời hứa từ tập thể lớp 10A18</h3>
     <p>
       Chúng em xin hứa sẽ luôn cố gắng học tập, rèn luyện đạo đức, đoàn kết và giúp đỡ lẫn nhau.
       Chúng em sẽ không ngừng nỗ lực để trở thành những người có ích cho gia đình và xã hội,
@@ -280,7 +329,7 @@
     </p>
   </div>
 
-  <div class="promise reveal">
+  <div class="promise reveal right">
     <h3>Lời chúc yêu thương</h3>
     <p>
       Nhân ngày Nhà giáo Việt Nam 20/11, kính chúc quý thầy cô luôn mạnh khỏe, hạnh phúc,
@@ -294,13 +343,16 @@
 
   <div class="finale reveal">
     <div class="big">THẦY CÔ LÀ NHỮNG NGƯỜI LÁI ĐÒ ĐÁNG KÍNH TRONG CUỘC ĐỜI CHÚNG EM!</div>
-    <div class="sub">Tập thể lớp …… xin chân thành tri ân!</div>
+    <div class="sub">Lớp 10A18 – Trường THPT Nghĩa Hành xin chân thành tri ân!</div>
     <div class="sign">Chúng em mãi khắc ghi công ơn thầy cô.</div>
     <div class="heart">❤</div>
   </div>
 </section>
 
-<footer>Thiệp tri ân thầy cô – Ngày Nhà giáo Việt Nam 20/11</footer>
+<footer>
+  <strong>Lớp 10A18</strong> – Trường THPT Nghĩa Hành<br>
+  Thiệp tri ân thầy cô – Ngày Nhà giáo Việt Nam 20/11
+</footer>
 
 <script>
   // Hiện từng phần khi cuộn tới
@@ -316,12 +368,12 @@
 
   // Cánh hoa rơi
   const petalBox = document.getElementById('petals');
-  for (let i = 0; i < 18; i++) {
+  for (let i = 0; i < 20; i++) {
     const p = document.createElement('div');
     p.className = 'petal';
     p.style.left = Math.random() * 100 + '%';
-    p.style.animationDuration = (8 + Math.random() * 8) + 's';
-    p.style.animationDelay = (-Math.random() * 15) + 's';
+    p.style.animationDuration = (8 + Math.random() * 8) + 's, ' + (2 + Math.random() * 2) + 's';
+    p.style.animationDelay = (-Math.random() * 15) + 's, 0s';
     p.style.transform = `scale(${0.6 + Math.random() * 0.8})`;
     petalBox.appendChild(p);
   }
