@@ -29,12 +29,14 @@
     /* ===== Cánh hoa rơi ===== */
     #petals { position: fixed; inset: 0; pointer-events: none; z-index: 5; overflow: hidden; }
     .petal {
-      position: absolute; top: -30px; width: 14px; height: 14px;
-      background: radial-gradient(circle at 30% 30%, #fff, var(--gold));
+      position: absolute; top: -30px;
       border-radius: 0 80% 0 80%;
-      opacity: 0.75;
+      opacity: 0.8;
       animation: fall linear infinite, sway 3s ease-in-out infinite alternate;
     }
+    .petal.gold { background: radial-gradient(circle at 30% 30%, #fff, var(--gold)); }
+    .petal.pink { background: radial-gradient(circle at 30% 30%, #fff, #f4a6c0); }
+    .petal.blue { background: radial-gradient(circle at 30% 30%, #fff, #9fd3f0); }
     @keyframes fall {
       0% { transform: translateY(0) rotate(0deg); }
       100% { transform: translateY(110vh) rotate(360deg); }
@@ -366,15 +368,18 @@
   }, { threshold: 0.15 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  // Cánh hoa rơi
+  // Tạo 50 cánh hoa: vàng, hồng, xanh nhạt
   const petalBox = document.getElementById('petals');
-  for (let i = 0; i < 20; i++) {
+  const colors = ['gold', 'pink', 'blue'];
+  for (let i = 0; i < 50; i++) {
     const p = document.createElement('div');
-    p.className = 'petal';
+    const size = 10 + Math.random() * 12;
+    p.className = 'petal ' + colors[i % colors.length];
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
     p.style.left = Math.random() * 100 + '%';
-    p.style.animationDuration = (8 + Math.random() * 8) + 's, ' + (2 + Math.random() * 2) + 's';
+    p.style.animationDuration = (8 + Math.random() * 10) + 's, ' + (2 + Math.random() * 2) + 's';
     p.style.animationDelay = (-Math.random() * 15) + 's, 0s';
-    p.style.transform = `scale(${0.6 + Math.random() * 0.8})`;
     petalBox.appendChild(p);
   }
 </script>
