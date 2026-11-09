@@ -53,7 +53,8 @@
     .word {
       position: absolute;
       white-space: nowrap;
-      font-weight: 700;
+      font-weight: 900;
+      letter-spacing: 1px;
       opacity: 0;
       transform: translate(-50%, -50%) scale(0);
       animation: pop 0.5s ease forwards, twinkleText 2s ease-in-out 0.6s infinite;
@@ -63,15 +64,7 @@
     }
     @keyframes twinkleText {
       0%, 100% { filter: brightness(1); }
-      50% { filter: brightness(1.8); }
-    }
-
-    /* Trái tim đập nhẹ trước khi tan */
-    @keyframes beatHeart {
-      0%, 100% { transform: scale(1); }
-      15% { transform: scale(1.06); }
-      30% { transform: scale(1); }
-      45% { transform: scale(1.04); }
+      50% { filter: brightness(1.5); }
     }
 
     /* Trái tim phình nhẹ rồi tan biến */
@@ -171,13 +164,13 @@
   // ===== Sao nền =====
   const starBox = document.getElementById('stars');
   for (let i = 0; i < 120; i++) {
-    const s = document.createElement('div');
-    s.className = 'star';
-    s.style.left = Math.random() * 100 + '%';
-    s.style.top = Math.random() * 100 + '%';
-    s.style.animationDuration = (1.5 + Math.random() * 3) + 's';
-    s.style.animationDelay = (-Math.random() * 3) + 's';
-    starBox.appendChild(s);
+    const st = document.createElement('div');
+    st.className = 'star';
+    st.style.left = Math.random() * 100 + '%';
+    st.style.top = Math.random() * 100 + '%';
+    st.style.animationDuration = (1.5 + Math.random() * 3) + 's';
+    st.style.animationDelay = (-Math.random() * 3) + 's';
+    starBox.appendChild(st);
   }
 
   // ===== Cánh hoa 7 màu =====
@@ -196,18 +189,20 @@
     petalBox.appendChild(p);
   }
 
-  // ===== Trái tim chữ =====
+  // ===== Trái tim chữ: to, rõ, có viền sáng =====
   const TEXT = 'chúc thầy cô giáo 20/11 vui vẻ';
   const heartColors = ['#ffd166', '#06d6a0', '#4cc9f0'];
-  const m = Math.min(W, H);
-  const s = m * 0.022;
-  const cx = W / 2;
-  const cy = H * 0.48;
-  const fontSize = Math.max(8, m * 0.018);
 
-  const layers = [1, 0.8, 0.6];
-  const perLayer = 55;
-  const delay = 45;
+  // Kích thước trái tim theo màn hình (to hơn trước)
+  const m = Math.min(W, H);
+  const s = m * 0.04;             // hệ số phóng to trái tim
+  const cx = W / 2;
+  const cy = H * 0.5;
+  const fontSize = Math.max(12, m * 0.03); // chữ to và rõ
+
+  const layers = [1, 0.82, 0.64]; // 3 lớp tạo độ dày cho trái tim
+  const perLayer = 45;
+  const delay = 60;               // mỗi chữ hiện cách nhau 60ms
   let idx = 0;
 
   layers.forEach((k, li) => {
@@ -223,7 +218,8 @@
       span.style.top = (cy - y * s * k) + 'px';
       span.style.fontSize = fontSize + 'px';
       span.style.color = heartColors[li];
-      span.style.textShadow = `0 0 6px ${heartColors[li]}`;
+      // Viền sáng quanh chữ để dễ nhìn trên nền tối
+      span.style.textShadow = `0 0 4px #fff, 0 0 10px ${heartColors[li]}, 0 0 20px ${heartColors[li]}`;
       span.style.animationDelay = (idx * delay / 1000) + 's, ' + (idx * delay / 1000 + 0.6) + 's';
       stage.appendChild(span);
       idx++;
@@ -252,16 +248,16 @@
   const totalTime = idx * delay + 500;
   setTimeout(() => {
     stage.classList.add('burst');
-    const ring = document.getElementById('shockwave');
-    ring.classList.add('go');
+    document.getElementById('shockwave').classList.add('go');
     fireworks(cx, cy);
   }, totalTime);
 
   // Hiện lời chúc từng dòng
   setTimeout(() => {
     finalBox.classList.add('show');
-    const paras = document.querySelectorAll('#final .letter p');
-    paras.forEach((p, i) => setTimeout(() => p.classList.add('in'), i * 700));
+    document.querySelectorAll('#final .letter p').forEach((p, i) => {
+      setTimeout(() => p.classList.add('in'), i * 700);
+    });
   }, totalTime + 2000);
 </script>
 
