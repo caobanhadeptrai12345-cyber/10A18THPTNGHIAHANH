@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
@@ -12,6 +12,17 @@
       background: #000;
       font-family: "Noto Sans", Arial, sans-serif;
       overflow-x: hidden;
+    }
+
+    /* Nền sao lấp lánh */
+    #stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .star {
+      position: absolute; width: 2px; height: 2px; border-radius: 50%;
+      background: #fff; animation: twinkle ease-in-out infinite;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
     }
 
     /* Cánh hoa rơi 7 màu */
@@ -33,10 +44,11 @@
 
     /* Sân khấu trái tim */
     #stage {
-      position: fixed; inset: 0;
+      position: fixed; inset: 0; z-index: 2;
       transition: opacity 1.5s ease;
     }
     #stage.fade { opacity: 0; pointer-events: none; }
+    #stage.burst { animation: heartFade 2s ease forwards; }
 
     .word {
       position: absolute;
@@ -44,22 +56,58 @@
       font-weight: 700;
       opacity: 0;
       transform: translate(-50%, -50%) scale(0);
-      animation: pop 0.5s ease forwards;
+      animation: pop 0.5s ease forwards, twinkleText 2s ease-in-out 0.6s infinite;
     }
     @keyframes pop {
       to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
     }
+    @keyframes twinkleText {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.8); }
+    }
+
+    /* Trái tim đập nhẹ trước khi tan */
+    @keyframes beatHeart {
+      0%, 100% { transform: scale(1); }
+      15% { transform: scale(1.06); }
+      30% { transform: scale(1); }
+      45% { transform: scale(1.04); }
+    }
 
     /* Trái tim phình nhẹ rồi tan biến */
     @keyframes heartFade {
-      0% { transform: scale(1); opacity: 1; }
+      0% { transform: scale(1); opacity: 1; filter: blur(0); }
       40% { transform: scale(1.08); opacity: 1; }
-      100% { transform: scale(1.4); opacity: 0; }
+      100% { transform: scale(1.5); opacity: 0; filter: blur(6px); }
+    }
+
+    /* Vòng sáng nổ khi trái tim tan */
+    #shockwave {
+      position: fixed; left: 50%; top: 48%;
+      width: 20px; height: 20px; margin: -10px 0 0 -10px;
+      border-radius: 50%; border: 3px solid #ffd166;
+      box-shadow: 0 0 30px #ffd166;
+      opacity: 0; pointer-events: none; z-index: 3;
+    }
+    #shockwave.go { animation: ring 1.6s ease-out forwards; }
+    @keyframes ring {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(40); opacity: 0; }
+    }
+
+    /* Pháo hoa nhỏ */
+    .spark {
+      position: fixed; width: 6px; height: 6px; border-radius: 50%;
+      pointer-events: none; z-index: 6;
+      animation: burst 1.2s ease-out forwards;
+    }
+    @keyframes burst {
+      to { transform: translate(var(--dx), var(--dy)) scale(0.2); opacity: 0; }
     }
 
     /* Lời chúc sau khi trái tim tan */
     #final {
-      position: relative; min-height: 100vh;
+      position: relative; min-height: 100vh; z-index: 4;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       text-align: center; padding: 60px 20px;
@@ -85,14 +133,21 @@
       font-size: clamp(1rem, 2.2vw, 1.15rem);
       line-height: 1.85; text-align: left;
     }
-    #final .letter p { margin-bottom: 16px; }
+    #final .letter p {
+      margin-bottom: 16px;
+      opacity: 0; transform: translateY(16px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    #final .letter p.in { opacity: 1; transform: translateY(0); }
     #final .letter .sign { text-align: center; font-weight: 700; color: #ffd166; margin-top: 20px; }
   </style>
 </head>
 <body>
 
+<div id="stars"></div>
 <div id="petals"></div>
 <div id="stage"></div>
+<div id="shockwave"></div>
 
 <div id="final">
   <div class="title">💙 LỜI CHÚC MỪNG NGÀY NHÀ GIÁO VIỆT NAM 20/11</div>
@@ -110,6 +165,20 @@
 <script>
   const stage = document.getElementById('stage');
   const finalBox = document.getElementById('final');
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+
+  // ===== Sao nền =====
+  const starBox = document.getElementById('stars');
+  for (let i = 0; i < 120; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.animationDuration = (1.5 + Math.random() * 3) + 's';
+    s.style.animationDelay = (-Math.random() * 3) + 's';
+    starBox.appendChild(s);
+  }
 
   // ===== Cánh hoa 7 màu =====
   const petalColors = ['#ff6b9d', '#ffd166', '#06d6a0', '#4cc9f0', '#b388ff', '#ff9f43', '#ffffff'];
@@ -130,8 +199,6 @@
   // ===== Trái tim chữ =====
   const TEXT = 'chúc thầy cô giáo 20/11 vui vẻ';
   const heartColors = ['#ffd166', '#06d6a0', '#4cc9f0'];
-  const W = window.innerWidth;
-  const H = window.innerHeight;
   const m = Math.min(W, H);
   const s = m * 0.022;
   const cx = W / 2;
@@ -157,18 +224,45 @@
       span.style.fontSize = fontSize + 'px';
       span.style.color = heartColors[li];
       span.style.textShadow = `0 0 6px ${heartColors[li]}`;
-      span.style.animationDelay = (idx * delay / 1000) + 's';
+      span.style.animationDelay = (idx * delay / 1000) + 's, ' + (idx * delay / 1000 + 0.6) + 's';
       stage.appendChild(span);
       idx++;
     }
   });
 
-  // Trái tim phình nhẹ rồi tan biến, sau đó hiện lời chúc
+  // ===== Pháo hoa nhỏ bắn ra =====
+  function fireworks(x, y) {
+    const colors = ['#ffd166', '#ff6b9d', '#06d6a0', '#4cc9f0', '#b388ff'];
+    for (let i = 0; i < 24; i++) {
+      const sp = document.createElement('div');
+      const angle = (i / 24) * 2 * Math.PI;
+      const dist = 80 + Math.random() * 80;
+      sp.className = 'spark';
+      sp.style.left = x + 'px';
+      sp.style.top = y + 'px';
+      sp.style.background = colors[i % colors.length];
+      sp.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+      sp.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+      document.body.appendChild(sp);
+      setTimeout(() => sp.remove(), 1300);
+    }
+  }
+
+  // Thời điểm trái tim tan
   const totalTime = idx * delay + 500;
   setTimeout(() => {
-    stage.style.animation = 'heartFade 2s ease forwards';
+    stage.classList.add('burst');
+    const ring = document.getElementById('shockwave');
+    ring.classList.add('go');
+    fireworks(cx, cy);
   }, totalTime);
-  setTimeout(() => finalBox.classList.add('show'), totalTime + 2000);
+
+  // Hiện lời chúc từng dòng
+  setTimeout(() => {
+    finalBox.classList.add('show');
+    const paras = document.querySelectorAll('#final .letter p');
+    paras.forEach((p, i) => setTimeout(() => p.classList.add('in'), i * 700));
+  }, totalTime + 2000);
 </script>
 
 </body>
