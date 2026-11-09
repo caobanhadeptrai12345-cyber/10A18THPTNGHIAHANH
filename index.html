@@ -3,60 +3,95 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lịch sử 10 - Bài 9</title>
+  <title>Người lái đò thầm lặng - Tri ân thầy cô 20/11</title>
   <style>
     :root {
-      --main: #8b3a1a;
-      --gold: #d9a441;
-      --bg: #fdf8f0;
-      --text: #2b2b2b;
+      --blue: #1f4e79;
+      --blue-light: #3f7cac;
+      --gold: #e8c46a;
+      --cream: #fffaf0;
+      --white: #ffffff;
+      --text: #2b3a4a;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: var(--bg);
+      font-family: "Georgia", "Times New Roman", serif;
+      background: var(--cream);
       color: var(--text);
-      line-height: 1.75;
+      line-height: 1.85;
       overflow-x: hidden;
     }
 
-    /* Thanh tiến trình đọc */
-    #progress {
-      position: fixed; top: 0; left: 0; height: 4px; width: 0;
-      background: linear-gradient(90deg, var(--gold), var(--main));
-      z-index: 100;
+    /* ===== Cánh hoa rơi ===== */
+    .petal {
+      position: fixed; top: -30px; width: 14px; height: 14px;
+      background: radial-gradient(circle at 30% 30%, #fff, var(--gold));
+      border-radius: 0 80% 0 80%;
+      opacity: 0.7; pointer-events: none; z-index: 0;
+      animation: fall linear infinite;
+    }
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(110vh) rotate(360deg); }
     }
 
-    /* Phần đầu */
-    .hero {
+    /* ===== Trang 1: Bìa ===== */
+    .cover {
       min-height: 100vh;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      text-align: center; color: #fff; padding: 20px;
-      background: linear-gradient(135deg, #3d1608, var(--main), #c0622e);
-      background-size: 200% 200%;
-      animation: gradientMove 12s ease infinite;
+      text-align: center; padding: 40px 20px;
+      background: linear-gradient(160deg, var(--blue) 0%, var(--blue-light) 60%, #9cc3e0 100%);
+      color: var(--white);
+      position: relative; overflow: hidden;
     }
-    @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    .cover .tag {
+      font-family: "Segoe UI", Arial, sans-serif;
+      letter-spacing: 4px; text-transform: uppercase;
+      font-size: 0.85rem; color: var(--gold);
+      animation: fadeDown 1s ease both;
     }
-    .hero h1 {
-      font-size: clamp(2rem, 6vw, 3.6rem);
-      animation: floatIn 1.2s ease both;
+    .cover h1 {
+      font-size: clamp(2rem, 6vw, 3.4rem);
+      margin: 16px 0 12px; line-height: 1.25;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.25);
+      animation: fadeDown 1.2s 0.2s ease both;
     }
-    .hero p {
-      margin-top: 12px; font-size: 1.15rem; opacity: 0.9;
-      animation: floatIn 1.2s 0.4s ease both;
+    .cover h2 {
+      font-weight: normal; font-style: italic;
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      color: #e6f0fa;
+      animation: fadeDown 1.2s 0.4s ease both;
     }
-    .hero .scroll-hint {
-      margin-top: 40px; font-size: 0.9rem; opacity: 0.7;
+    .cover .dedicate {
+      margin-top: 22px; font-size: 1.1rem;
+      animation: fadeDown 1.2s 0.6s ease both;
+    }
+    .cover .class-info {
+      margin-top: 8px; font-size: 1rem; opacity: 0.85;
+      animation: fadeDown 1.2s 0.7s ease both;
+    }
+    .cover .poem {
+      margin-top: 30px; max-width: 520px;
+      font-style: italic; font-size: 1.1rem;
+      border-top: 1px solid rgba(255,255,255,0.3);
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+      padding: 18px 10px;
+      animation: fadeDown 1.2s 0.9s ease both;
+    }
+    .cover .intro {
+      margin-top: 20px; max-width: 600px; font-size: 1rem;
+      opacity: 0.92;
+      animation: fadeDown 1.2s 1.1s ease both;
+    }
+    .cover .scroll-hint {
+      margin-top: 36px; font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 0.85rem; opacity: 0.7;
       animation: bounce 2s infinite;
     }
-    @keyframes floatIn {
-      from { opacity: 0; transform: translateY(30px); }
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
       to { opacity: 1; transform: translateY(0); }
     }
     @keyframes bounce {
@@ -64,83 +99,142 @@
       50% { transform: translateY(8px); }
     }
 
-    /* Khối nội dung hiện dần khi cuộn */
-    .reveal {
-      opacity: 0;
-      transform: translateY(50px) scale(0.98);
-      transition: opacity 0.9s ease, transform 0.9s cubic-bezier(.2,.8,.2,1);
-    }
-    .reveal.show { opacity: 1; transform: translateY(0) scale(1); }
-    .reveal.from-left { transform: translateX(-60px); }
-    .reveal.from-right { transform: translateX(60px); }
-    .reveal.from-left.show, .reveal.from-right.show { transform: translateX(0); }
-
-    main { max-width: 960px; margin: 0 auto; padding: 60px 20px; }
-
-    .card {
-      background: #fff;
-      border-radius: 16px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-      padding: 28px;
-      margin-bottom: 50px;
-      border-left: 6px solid var(--gold);
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-    }
-    .card:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(0,0,0,0.14); }
-    .card h2 { color: var(--main); font-size: 1.5rem; margin-bottom: 12px; }
-    .card ul { padding-left: 22px; }
-    .card li { margin-bottom: 8px; }
-
-    /* Ảnh */
+    /* ===== Khung ảnh ===== */
     .photo {
-      width: 100%; border-radius: 14px; overflow: hidden;
-      margin: 18px 0; background: #eadfd0;
-      aspect-ratio: 16 / 9;
-      position: relative;
+      position: relative; overflow: hidden;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #dbe9f5, #fdf1d0);
+      box-shadow: 0 12px 30px rgba(31,78,121,0.18);
+      border: 6px solid var(--white);
+      aspect-ratio: 4 / 3;
     }
     .photo img {
-      width: 100%; height: 100%; object-fit: cover;
-      transition: transform 0.8s ease;
-      display: block;
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.9s ease;
     }
     .photo:hover img { transform: scale(1.08); }
-    .photo span {
+    .photo .caption {
       position: absolute; inset: 0; display: flex;
       align-items: center; justify-content: center;
-      color: #8b7b68; font-size: 0.9rem; z-index: -1;
+      color: #7a8ea3; font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 0.9rem; z-index: -1;
     }
 
-    .highlight {
-      background: #fff3d6; padding: 2px 6px; border-radius: 4px; font-weight: 600;
+    /* ===== Khối nội dung & hiện dần khi cuộn ===== */
+    .reveal {
+      opacity: 0; transform: translateY(50px);
+      transition: opacity 1s ease, transform 1s cubic-bezier(.2,.8,.2,1);
+    }
+    .reveal.show { opacity: 1; transform: translateY(0); }
+    .reveal.left { transform: translateX(-60px); }
+    .reveal.right { transform: translateX(60px); }
+    .reveal.left.show, .reveal.right.show { transform: translateX(0); }
+
+    section.page {
+      position: relative; z-index: 1;
+      padding: 90px 20px;
+      max-width: 1000px; margin: 0 auto;
+    }
+    .page-title {
+      text-align: center; color: var(--blue);
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      margin-bottom: 10px;
+    }
+    .divider {
+      width: 90px; height: 3px; margin: 0 auto 40px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
     }
 
-    /* Hai cột */
-    .two-col {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
-      align-items: center; margin-bottom: 50px;
+    /* ===== Trang 2 ===== */
+    .letter {
+      background: var(--white);
+      border-radius: 18px;
+      padding: 48px 44px;
+      box-shadow: 0 14px 40px rgba(31,78,121,0.1);
+      border-top: 6px solid var(--gold);
+      margin-bottom: 50px;
     }
-    .two-col .photo { margin: 0; }
-    @media (max-width: 700px) {
-      .two-col { grid-template-columns: 1fr; }
+    .letter .greet { font-weight: bold; color: var(--blue); margin-bottom: 14px; }
+    .letter p { margin-bottom: 16px; text-align: justify; }
+    .highlight-quote {
+      margin: 26px 0 0; padding: 18px 24px;
+      border-left: 4px solid var(--gold);
+      background: #fdf8e8; font-style: italic; color: var(--blue);
+      border-radius: 0 10px 10px 0;
     }
 
-    /* Ô kiểm tra */
-    .quiz { background: var(--main); color: #fff; }
-    .quiz h2 { color: var(--gold); }
-    .quiz button {
-      background: var(--gold); color: #3d1608; border: none;
-      padding: 8px 16px; border-radius: 999px; cursor: pointer;
-      font-weight: 600; margin-top: 8px; transition: transform 0.2s;
+    .memory-title {
+      text-align: center; color: var(--blue);
+      font-size: 1.5rem; margin: 20px 0 30px;
     }
-    .quiz button:hover { transform: scale(1.06); }
-    .answer {
-      display: none; margin-top: 10px; padding: 10px 14px;
-      background: rgba(255,255,255,0.12); border-radius: 8px;
+    .gallery {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 26px;
+      margin-bottom: 30px;
     }
-    .answer.open { display: block; animation: floatIn 0.5s ease; }
+    .memory-text {
+      background: var(--white); border-radius: 18px;
+      padding: 36px 40px; text-align: center;
+      box-shadow: 0 10px 30px rgba(31,78,121,0.08);
+    }
+    .memory-text p { margin-bottom: 14px; }
+    .memory-text .closing-quote {
+      margin-top: 18px; color: var(--blue-light);
+      font-style: italic; font-size: 1.1rem;
+    }
+
+    /* ===== Trang 3 ===== */
+    .promise {
+      background: linear-gradient(160deg, #eef5fb, #fffdf5);
+      border-radius: 18px; padding: 44px;
+      border: 1px solid #d6e5f2;
+      margin-bottom: 40px;
+    }
+    .promise h3, .wish h3 {
+      color: var(--blue); font-size: 1.25rem; margin-bottom: 12px;
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .promise p, .wish p { margin-bottom: 14px; text-align: justify; }
+
+    .wish {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
+      align-items: center; margin-bottom: 40px;
+    }
+    .wish .photo { aspect-ratio: 3 / 4; }
+
+    .finale {
+      text-align: center; padding: 56px 24px;
+      background: linear-gradient(135deg, var(--blue), var(--blue-light));
+      color: var(--white); border-radius: 20px;
+      box-shadow: 0 16px 40px rgba(31,78,121,0.3);
+    }
+    .finale .big {
+      font-size: clamp(1.4rem, 4vw, 2rem); font-weight: bold;
+      color: var(--gold); line-height: 1.4; margin-bottom: 18px;
+    }
+    .finale .sub { font-size: 1.05rem; margin-bottom: 24px; }
+    .finale .sign {
+      font-style: italic; font-size: 1.05rem; opacity: 0.95;
+    }
+    .finale .heart {
+      display: inline-block; font-size: 2rem; margin-top: 14px;
+      animation: beat 1.6s ease-in-out infinite;
+    }
+    @keyframes beat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
 
     footer {
-      text-align: center; padding: 30px; color: #888; font-size: 0.9rem;
+      text-align: center; padding: 30px; color: #7a8ea3;
+      font-family: "Segoe UI", Arial, sans-serif; font-size: 0.9rem;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 720px) {
+      .letter { padding: 30px 22px; }
+      .gallery, .wish { grid-template-columns: 1fr; }
+      .promise { padding: 28px 22px; }
+      section.page { padding: 60px 16px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -151,115 +245,157 @@
 </head>
 <body>
 
-<div id="progress"></div>
+<!-- Cánh hoa rơi (tạo bằng JavaScript) -->
+<div id="petals"></div>
 
-<header class="hero">
-  <h1>Lịch sử 10 - Bài 9</h1>
-  <p>Chế độ phong kiến châu Âu</p>
-  <div class="scroll-hint">↓ Cuộn xuống để khám phá</div>
+<!-- ===== TRANG 1: BÌA ===== -->
+<header class="cover">
+  <div class="tag">Tri ân thầy cô</div>
+  <h1>NGƯỜI LÁI ĐÒ<br>THẦM LẶNG</h1>
+  <h2>Tri ân thầy cô – Chào mừng ngày Nhà giáo Việt Nam 20/11</h2>
+  <div class="dedicate">Kính tặng: Quý thầy cô giáo kính yêu!</div>
+  <div class="class-info">Tập thể lớp: …… &nbsp;|&nbsp; Trường: ……</div>
+  <div class="poem">
+    "Ơn thầy soi lối mở đường,<br>
+    Cho con vững bước dặm trường tương lai."
+  </div>
+  <p class="intro">
+    Tháng 11 lại về, mang theo những cảm xúc yêu thương và lòng biết ơn sâu sắc.
+    Đây là dịp để chúng em gửi đến thầy cô những lời tri ân chân thành nhất,
+    những người đã luôn tận tụy dìu dắt chúng em trên hành trình chinh phục tri thức.
+  </p>
+  <div class="scroll-hint">↓ Cuộn xuống để đọc thiệp</div>
 </header>
 
-<main>
+<!-- ===== TRANG 2: LỜI TRI ÂN & GÓC KỶ NIỆM ===== -->
+<section class="page">
+  <h2 class="page-title reveal">Lời tri ân gửi đến thầy cô</h2>
+  <div class="divider reveal"></div>
 
-  <!-- Phần 1: ảnh bên trái, chữ bên phải -->
-  <div class="two-col reveal from-left">
-    <div class="photo">
-      <img src="anh1.jpg" alt="Lâu đài phong kiến" onerror="this.style.display='none'">
-      <span>Ảnh 1: anh1.jpg</span>
-    </div>
-    <div class="card" style="margin-bottom:0">
-      <h2>1. Sự hình thành</h2>
-      <ul>
-        <li>Sau khi Tây La Mã sụp đổ (năm 476), các vương quốc người German hình thành.</li>
-        <li>Quan hệ sản xuất phong kiến dần thay thế chế độ chiếm hữu nô lệ.</li>
-        <li><span class="highlight">Lãnh chúa</span> và <span class="highlight">nông nô</span> là hai giai cấp chính.</li>
-      </ul>
-    </div>
+  <div class="letter reveal">
+    <p class="greet">Kính thưa quý thầy cô!</p>
+    <p>
+      Có những nghề nghiệp không tạo nên những điều lớn lao ngay trước mắt,
+      nhưng lại âm thầm góp phần xây dựng tương lai của biết bao thế hệ.
+      Nghề giáo chính là một nghề như thế.
+    </p>
+    <p>
+      Thầy cô không chỉ truyền đạt cho chúng em những kiến thức trong sách vở
+      mà còn dạy chúng em cách làm người, biết yêu thương, sẻ chia, có trách nhiệm
+      và không ngừng cố gắng trong cuộc sống.
+    </p>
+    <p>
+      Chúng em hiểu rằng, đằng sau mỗi bài giảng là biết bao tâm huyết, sự kiên nhẫn
+      và những tháng ngày thầy cô miệt mài chuẩn bị. Dù đôi lúc chúng em còn nghịch ngợm,
+      chưa chăm ngoan hay mắc phải những lỗi lầm, thầy cô vẫn luôn bao dung, nhắc nhở
+      và dành cho chúng em sự quan tâm chân thành.
+    </p>
+    <p>
+      Nhân ngày Nhà giáo Việt Nam 20/11, tập thể lớp chúng em xin gửi đến quý thầy cô
+      lòng biết ơn sâu sắc nhất. Cảm ơn thầy cô vì đã luôn đồng hành, động viên và tiếp
+      thêm động lực để chúng em tự tin bước tiếp trên con đường học tập.
+    </p>
   </div>
 
-  <!-- Phần 2 -->
-  <div class="card reveal">
-    <h2>2. Kinh tế lãnh địa</h2>
-    <div class="photo">
-      <img src="anh2.jpg" alt="Lãnh địa" onerror="this.style.display='none'">
-      <span>Ảnh 2: anh2.jpg</span>
-    </div>
-    <ul>
-      <li>Lãnh địa là đơn vị kinh tế cơ bản, tự cung tự cấp.</li>
-      <li>Nông nô nộp địa tô cho lãnh chúa bằng sản phẩm, tiền hoặc lao dịch.</li>
-      <li>Thủ công nghiệp gắn với lãnh địa, chủ yếu phục vụ nhu cầu tại chỗ.</li>
-    </ul>
-  </div>
+  <h3 class="memory-title reveal">Góc kỷ niệm – Những điều không thể quên</h3>
 
-  <!-- Phần 3: chữ bên trái, ảnh bên phải -->
-  <div class="two-col reveal from-right">
-    <div class="card" style="margin-bottom:0">
-      <h2>3. Thành thị trung đại</h2>
-      <ul>
-        <li>Từ thế kỉ XI, thủ công nghiệp và thương nghiệp phát triển, thành thị ra đời.</li>
-        <li>Thị dân đấu tranh giành quyền tự trị, nhiều thành thị có hiến chương riêng.</li>
-        <li>Thành thị là tiền đề cho sự phát triển kinh tế hàng hóa sau này.</li>
-      </ul>
+  <div class="gallery">
+    <div class="photo reveal left">
+      <img src="anh1.jpg" alt="Thầy cô và học sinh" onerror="this.style.display='none'">
+      <span class="caption">Ảnh 1: anh1.jpg</span>
     </div>
-    <div class="photo">
-      <img src="anh3.jpg" alt="Thành thị trung đại" onerror="this.style.display='none'">
-      <span>Ảnh 3: anh3.jpg</span>
+    <div class="photo reveal right">
+      <img src="anh2.jpg" alt="Lớp học" onerror="this.style.display='none'">
+      <span class="caption">Ảnh 2: anh2.jpg</span>
     </div>
   </div>
 
-  <!-- Phần 4 -->
-  <div class="card reveal">
-    <h2>4. Các tầng lớp xã hội</h2>
-    <ul>
-      <li><span class="highlight">Giai cấp thống trị:</span> vua, quý tộc, tăng lữ.</li>
-      <li><span class="highlight">Giai cấp bị trị:</span> nông nô, thợ thủ công, thị dân.</li>
-    </ul>
+  <div class="memory-text reveal">
+    <p>
+      Mỗi giờ học, mỗi lời giảng, mỗi nụ cười và cả những lời nhắc nhở của thầy cô
+      đều trở thành những kỷ niệm đẹp trong quãng đời học sinh.
+    </p>
+    <p>
+      Dù thời gian có trôi qua, chúng em vẫn sẽ luôn ghi nhớ những tháng ngày được học tập
+      dưới mái trường thân yêu, nơi có thầy cô tận tụy và những người bạn đồng hành đáng quý.
+    </p>
+    <p class="closing-quote">
+      "Một người thầy tốt giống như ngọn nến – cháy hết mình để soi sáng con đường cho người khác."
+    </p>
+  </div>
+</section>
+
+<!-- ===== TRANG 3: LỜI HỨA & LỜI CHÚC ===== -->
+<section class="page">
+  <h2 class="page-title reveal">Lời hứa và thông điệp gửi thầy cô</h2>
+  <div class="divider reveal"></div>
+
+  <div class="promise reveal">
+    <h3>Lời hứa từ tập thể lớp</h3>
+    <p>
+      Chúng em xin hứa sẽ luôn cố gắng học tập, rèn luyện đạo đức, đoàn kết và giúp đỡ lẫn nhau.
+      Chúng em sẽ không ngừng nỗ lực để trở thành những người có ích cho gia đình và xã hội,
+      xứng đáng với công sức dạy dỗ và kỳ vọng mà thầy cô đã dành cho mình.
+    </p>
+    <p>
+      Chúng em biết rằng món quà ý nghĩa nhất dành tặng thầy cô không chỉ là những bó hoa
+      hay lời chúc, mà còn chính là sự trưởng thành, tiến bộ và thành công của mỗi học trò.
+    </p>
   </div>
 
-  <!-- Phần 5: kiểm tra -->
-  <div class="card quiz reveal">
-    <h2>5. Kiểm tra nhanh</h2>
-
-    <p><strong>Câu 1:</strong> Đơn vị kinh tế cơ bản của xã hội phong kiến châu Âu là gì?</p>
-    <button onclick="toggleAnswer('a1')">Xem đáp án</button>
-    <div class="answer" id="a1">Lãnh địa phong kiến.</div>
-
-    <p style="margin-top:18px"><strong>Câu 2:</strong> Nông nô phải làm gì cho lãnh chúa?</p>
-    <button onclick="toggleAnswer('a2')">Xem đáp án</button>
-    <div class="answer" id="a2">Nộp địa tô (sản phẩm, tiền hoặc lao dịch).</div>
-
-    <p style="margin-top:18px"><strong>Câu 3:</strong> Thành thị trung đại xuất hiện từ khoảng thế kỉ nào?</p>
-    <button onclick="toggleAnswer('a3')">Xem đáp án</button>
-    <div class="answer" id="a3">Từ thế kỉ XI.</div>
+  <div class="wish">
+    <div class="reveal left">
+      <div class="promise" style="margin-bottom:0">
+        <h3>Lời chúc yêu thương</h3>
+        <p>
+          Nhân ngày Nhà giáo Việt Nam 20/11, kính chúc quý thầy cô luôn mạnh khỏe, hạnh phúc,
+          bình an và thành công trong sự nghiệp trồng người.
+        </p>
+        <p>
+          Mong rằng ngọn lửa nhiệt huyết với nghề giáo sẽ luôn rực cháy, để thầy cô tiếp tục
+          truyền cảm hứng và chắp cánh ước mơ cho nhiều thế hệ học sinh.
+        </p>
+      </div>
+    </div>
+    <div class="photo reveal right">
+      <img src="anh3.jpg" alt="Bó hoa tặng thầy cô" onerror="this.style.display='none'">
+      <span class="caption">Ảnh 3: anh3.jpg</span>
+    </div>
   </div>
 
-</main>
+  <div class="finale reveal">
+    <div class="big">THẦY CÔ LÀ NHỮNG NGƯỜI LÁI ĐÒ ĐÁNG KÍNH TRONG CUỘC ĐỜI CHÚNG EM!</div>
+    <div class="sub">Tập thể lớp …… xin chân thành tri ân!</div>
+    <div class="sign">Chúng em mãi khắc ghi công ơn thầy cô.</div>
+    <div class="heart">❤</div>
+  </div>
+</section>
 
-<footer>Trang ôn tập Lịch sử lớp 10</footer>
+<footer>Thiệp tri ân thầy cô – Ngày Nhà giáo Việt Nam 20/11</footer>
 
 <script>
   // Hiện từng phần khi cuộn tới
-  const items = document.querySelectorAll('.reveal');
+  const revealEls = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
+    entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('show'), i * 80);
+        entry.target.classList.add('show');
         observer.unobserve(entry.target);
       }
     });
   }, { threshold: 0.15 });
-  items.forEach(el => observer.observe(el));
+  revealEls.forEach(el => observer.observe(el));
 
-  // Thanh tiến trình đọc phía trên
-  window.addEventListener('scroll', () => {
-    const h = document.documentElement;
-    const percent = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
-    document.getElementById('progress').style.width = percent + '%';
-  });
-
-  // Hiện/ẩn đáp án
-  function toggleAnswer(id) {
-    document.getElementById(id).classList.toggle('open');
+  // Tạo cánh hoa rơi nhẹ
+  const petalBox = document.getElementById('petals');
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.animationDuration = (8 + Math.random() * 8) + 's';
+    p.style.animationDelay = (-Math.random() * 15) + 's';
+    p.style.transform = `scale(${0.6 + Math.random() * 0.8})`;
+    petalBox.appendChild(p);
   }
 </script>
 
