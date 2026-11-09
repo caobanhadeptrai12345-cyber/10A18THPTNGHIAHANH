@@ -7,97 +7,261 @@
   <style>
     :root {
       --main: #8b3a1a;
+      --gold: #d9a441;
       --bg: #fdf8f0;
       --text: #2b2b2b;
-      --accent: #d9a441;
     }
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
-      margin: 0;
       font-family: "Segoe UI", Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.7;
+      line-height: 1.75;
+      overflow-x: hidden;
     }
-    header {
-      background: var(--main);
-      color: #fff;
-      padding: 40px 20px;
-      text-align: center;
+
+    /* Thanh tiến trình đọc */
+    #progress {
+      position: fixed; top: 0; left: 0; height: 4px; width: 0;
+      background: linear-gradient(90deg, var(--gold), var(--main));
+      z-index: 100;
     }
-    header h1 { margin: 0 0 8px; font-size: 1.9rem; }
-    header p { margin: 0; opacity: 0.9; }
-    main {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 24px 20px 60px;
+
+    /* Phần đầu */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; color: #fff; padding: 20px;
+      background: linear-gradient(135deg, #3d1608, var(--main), #c0622e);
+      background-size: 200% 200%;
+      animation: gradientMove 12s ease infinite;
     }
-    section {
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 6vw, 3.6rem);
+      animation: floatIn 1.2s ease both;
+    }
+    .hero p {
+      margin-top: 12px; font-size: 1.15rem; opacity: 0.9;
+      animation: floatIn 1.2s 0.4s ease both;
+    }
+    .hero .scroll-hint {
+      margin-top: 40px; font-size: 0.9rem; opacity: 0.7;
+      animation: bounce 2s infinite;
+    }
+    @keyframes floatIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(8px); }
+    }
+
+    /* Khối nội dung hiện dần khi cuộn */
+    .reveal {
+      opacity: 0;
+      transform: translateY(50px) scale(0.98);
+      transition: opacity 0.9s ease, transform 0.9s cubic-bezier(.2,.8,.2,1);
+    }
+    .reveal.show { opacity: 1; transform: translateY(0) scale(1); }
+    .reveal.from-left { transform: translateX(-60px); }
+    .reveal.from-right { transform: translateX(60px); }
+    .reveal.from-left.show, .reveal.from-right.show { transform: translateX(0); }
+
+    main { max-width: 960px; margin: 0 auto; padding: 60px 20px; }
+
+    .card {
       background: #fff;
-      border-left: 5px solid var(--accent);
-      border-radius: 8px;
-      padding: 20px 24px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      padding: 28px;
+      margin-bottom: 50px;
+      border-left: 6px solid var(--gold);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
     }
-    h2 { color: var(--main); margin-top: 0; font-size: 1.3rem; }
-    ul { padding-left: 20px; }
-    li { margin-bottom: 6px; }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(0,0,0,0.14); }
+    .card h2 { color: var(--main); font-size: 1.5rem; margin-bottom: 12px; }
+    .card ul { padding-left: 22px; }
+    .card li { margin-bottom: 8px; }
+
+    /* Ảnh */
+    .photo {
+      width: 100%; border-radius: 14px; overflow: hidden;
+      margin: 18px 0; background: #eadfd0;
+      aspect-ratio: 16 / 9;
+      position: relative;
+    }
+    .photo img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.8s ease;
+      display: block;
+    }
+    .photo:hover img { transform: scale(1.08); }
+    .photo span {
+      position: absolute; inset: 0; display: flex;
+      align-items: center; justify-content: center;
+      color: #8b7b68; font-size: 0.9rem; z-index: -1;
+    }
+
     .highlight {
-      background: #fff3d6;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-weight: bold;
+      background: #fff3d6; padding: 2px 6px; border-radius: 4px; font-weight: 600;
     }
-    .quiz h3 { color: var(--main); margin-bottom: 6px; }
-    .answer { display: none; color: #1b6b3a; font-weight: bold; margin-top: 6px; }
-    button {
-      background: var(--main);
-      color: #fff;
-      border: none;
-      padding: 6px 14px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.9rem;
+
+    /* Hai cột */
+    .two-col {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+      align-items: center; margin-bottom: 50px;
     }
-    button:hover { opacity: 0.85; }
+    .two-col .photo { margin: 0; }
+    @media (max-width: 700px) {
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    /* Ô kiểm tra */
+    .quiz { background: var(--main); color: #fff; }
+    .quiz h2 { color: var(--gold); }
+    .quiz button {
+      background: var(--gold); color: #3d1608; border: none;
+      padding: 8px 16px; border-radius: 999px; cursor: pointer;
+      font-weight: 600; margin-top: 8px; transition: transform 0.2s;
+    }
+    .quiz button:hover { transform: scale(1.06); }
+    .answer {
+      display: none; margin-top: 10px; padding: 10px 14px;
+      background: rgba(255,255,255,0.12); border-radius: 8px;
+    }
+    .answer.open { display: block; animation: floatIn 0.5s ease; }
+
     footer {
-      text-align: center;
-      font-size: 0.85rem;
-      color: #777;
-      padding: 20px;
+      text-align: center; padding: 30px; color: #888; font-size: 0.9rem;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .reveal { opacity: 1; transform: none; }
     }
   </style>
 </head>
 <body>
 
-<header>
+<div id="progress"></div>
+
+<header class="hero">
   <h1>Lịch sử 10 - Bài 9</h1>
   <p>Chế độ phong kiến châu Âu</p>
+  <div class="scroll-hint">↓ Cuộn xuống để khám phá</div>
 </header>
 
 <main>
 
-  <section>
-    <h2>1. Sự hình thành chế độ phong kiến</h2>
-    <ul>
-      <li>Sau khi Tây La Mã sụp đổ (năm 476), các vương quốc người German hình thành trên lãnh thổ cũ.</li>
-      <li>Quan hệ sản xuất phong kiến dần thay thế chế độ chiếm hữu nô lệ.</li>
-      <li>Hai giai cấp chính: <span class="highlight">lãnh chúa phong kiến</span> và <span class="highlight">nông nô</span>.</li>
-    </ul>
-  </section>
+  <!-- Phần 1: ảnh bên trái, chữ bên phải -->
+  <div class="two-col reveal from-left">
+    <div class="photo">
+      <img src="anh1.jpg" alt="Lâu đài phong kiến" onerror="this.style.display='none'">
+      <span>Ảnh 1: anh1.jpg</span>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <h2>1. Sự hình thành</h2>
+      <ul>
+        <li>Sau khi Tây La Mã sụp đổ (năm 476), các vương quốc người German hình thành.</li>
+        <li>Quan hệ sản xuất phong kiến dần thay thế chế độ chiếm hữu nô lệ.</li>
+        <li><span class="highlight">Lãnh chúa</span> và <span class="highlight">nông nô</span> là hai giai cấp chính.</li>
+      </ul>
+    </div>
+  </div>
 
-  <section>
+  <!-- Phần 2 -->
+  <div class="card reveal">
     <h2>2. Kinh tế lãnh địa</h2>
+    <div class="photo">
+      <img src="anh2.jpg" alt="Lãnh địa" onerror="this.style.display='none'">
+      <span>Ảnh 2: anh2.jpg</span>
+    </div>
     <ul>
       <li>Lãnh địa là đơn vị kinh tế cơ bản, tự cung tự cấp.</li>
-      <li>Nông nô phải nộp địa tô (bằng sản phẩm, tiền hoặc lao dịch) cho lãnh chúa.</li>
-      <li>Thủ công nghiệp gắn với lãnh địa, sản xuất chủ yếu để phục vụ nhu cầu tại chỗ.</li>
+      <li>Nông nô nộp địa tô cho lãnh chúa bằng sản phẩm, tiền hoặc lao dịch.</li>
+      <li>Thủ công nghiệp gắn với lãnh địa, chủ yếu phục vụ nhu cầu tại chỗ.</li>
     </ul>
-  </section>
+  </div>
 
-  <section>
-    <h2>3. Thành thị trung đại</h2>
+  <!-- Phần 3: chữ bên trái, ảnh bên phải -->
+  <div class="two-col reveal from-right">
+    <div class="card" style="margin-bottom:0">
+      <h2>3. Thành thị trung đại</h2>
+      <ul>
+        <li>Từ thế kỉ XI, thủ công nghiệp và thương nghiệp phát triển, thành thị ra đời.</li>
+        <li>Thị dân đấu tranh giành quyền tự trị, nhiều thành thị có hiến chương riêng.</li>
+        <li>Thành thị là tiền đề cho sự phát triển kinh tế hàng hóa sau này.</li>
+      </ul>
+    </div>
+    <div class="photo">
+      <img src="anh3.jpg" alt="Thành thị trung đại" onerror="this.style.display='none'">
+      <span>Ảnh 3: anh3.jpg</span>
+    </div>
+  </div>
+
+  <!-- Phần 4 -->
+  <div class="card reveal">
+    <h2>4. Các tầng lớp xã hội</h2>
     <ul>
-      <li>Từ thế kỉ XI, thủ công nghiệp và thương nghiệp phát triển, thành thị ra đời.</li>
-      <li>Thị dân đấu tranh giành quyền tự trị, nhiều thành thị có hiến chương
+      <li><span class="highlight">Giai cấp thống trị:</span> vua, quý tộc, tăng lữ.</li>
+      <li><span class="highlight">Giai cấp bị trị:</span> nông nô, thợ thủ công, thị dân.</li>
+    </ul>
+  </div>
+
+  <!-- Phần 5: kiểm tra -->
+  <div class="card quiz reveal">
+    <h2>5. Kiểm tra nhanh</h2>
+
+    <p><strong>Câu 1:</strong> Đơn vị kinh tế cơ bản của xã hội phong kiến châu Âu là gì?</p>
+    <button onclick="toggleAnswer('a1')">Xem đáp án</button>
+    <div class="answer" id="a1">Lãnh địa phong kiến.</div>
+
+    <p style="margin-top:18px"><strong>Câu 2:</strong> Nông nô phải làm gì cho lãnh chúa?</p>
+    <button onclick="toggleAnswer('a2')">Xem đáp án</button>
+    <div class="answer" id="a2">Nộp địa tô (sản phẩm, tiền hoặc lao dịch).</div>
+
+    <p style="margin-top:18px"><strong>Câu 3:</strong> Thành thị trung đại xuất hiện từ khoảng thế kỉ nào?</p>
+    <button onclick="toggleAnswer('a3')">Xem đáp án</button>
+    <div class="answer" id="a3">Từ thế kỉ XI.</div>
+  </div>
+
+</main>
+
+<footer>Trang ôn tập Lịch sử lớp 10</footer>
+
+<script>
+  // Hiện từng phần khi cuộn tới
+  const items = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('show'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  items.forEach(el => observer.observe(el));
+
+  // Thanh tiến trình đọc phía trên
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const percent = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    document.getElementById('progress').style.width = percent + '%';
+  });
+
+  // Hiện/ẩn đáp án
+  function toggleAnswer(id) {
+    document.getElementById(id).classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>
