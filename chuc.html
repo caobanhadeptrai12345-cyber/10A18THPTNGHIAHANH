@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chúc thầy cô 20/11</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; }
+    body {
+      background: #000;
+      font-family: "Noto Sans", Arial, sans-serif;
+    }
+
+    #stage {
+      position: fixed; inset: 0;
+      transition: opacity 1.5s ease;
+    }
+    #stage.fade { opacity: 0; }
+
+    .word {
+      position: absolute;
+      white-space: nowrap;
+      color: #ff4d8d;
+      font-weight: 700;
+      text-shadow: 0 0 6px rgba(255,77,141,0.8);
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0);
+      animation: pop 0.5s ease forwards;
+    }
+    @keyframes pop {
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
+    #final {
+      position: fixed; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 20px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.8s ease;
+    }
+    #final.show { opacity: 1; }
+
+    #final .f1 {
+      font-size: clamp(1.8rem, 6vw, 3.6rem);
+      font-weight: 900; color: #fff;
+      letter-spacing: 2px;
+    }
+    #final .f2 {
+      margin-top: 10px;
+      font-size: clamp(2.6rem, 11vw, 7rem);
+      font-weight: 900; color: #ff2d3d;
+      text-shadow: 0 0 12px #ff2d3d, 0 0 30px #ff2d3d;
+      animation: zoom 0.9s cubic-bezier(.2,.8,.2,1) both,
+                 glow 1.6s ease-in-out 0.9s infinite;
+    }
+    @keyframes zoom {
+      from { transform: scale(0.3); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    @keyframes glow {
+      0%, 100% { text-shadow: 0 0 12px #ff2d3d, 0 0 30px #ff2d3d; }
+      50% { text-shadow: 0 0 24px #ff2d3d, 0 0 60px #ff2d3d, 0 0 90px #ff2d3d; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="stage"></div>
+
+<div id="final">
+  <div class="f1">CHÚC THẦY CÔ</div>
+  <div class="f2">20/11 VUI VẺ</div>
+</div>
+
+<script>
+  const stage = document.getElementById('stage');
+  const finalBox = document.getElementById('final');
+
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+  const m = Math.min(W, H);
+  const s = m * 0.022;          // độ lớn trái tim
+  const cx = W / 2;
+  const cy = H * 0.48;
+  const fontSize = Math.max(8, m * 0.018);
+
+  const layers = [1, 0.8, 0.6]; // 3 lớp chữ tạo thành trái tim dày
+  const perLayer = 55;
+  const delay = 45;             // mili giây giữa mỗi cụm chữ
+  let idx = 0;
+
+  layers.forEach(k => {
+    for (let i = 0; i < perLayer; i++) {
+      const t = (i / perLayer) * 2 * Math.PI;
+      // Phương trình trái tim
+      const x = 16 * Math.pow(Math.sin(t), 3);
+      const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+
+      const span = document.createElement('span');
+      span.className = 'word';
+      span.textContent = 'I Love You';
+      span.style.left = (cx + x * s * k) + 'px';
+      span.style.top = (cy - y * s * k) + 'px';
+      span.style.fontSize = fontSize + 'px';
+      span.style.animationDelay = (idx * delay / 1000) + 's';
+      stage.appendChild(span);
+      idx++;
+    }
+  });
+
+  // Thời gian chữ cuối cùng hiện xong
+  const totalTime = idx * delay + 500;
+
+  // Trái tim mờ dần
+  setTimeout(() => stage.classList.add('fade'), totalTime);
+
+  // Hiện dòng chữ lớn
+  setTimeout(() => finalBox.classList.add('show'), totalTime + 1200);
+</script>
+
+</body>
+</html>
